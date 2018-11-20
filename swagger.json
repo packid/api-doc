@@ -64,8 +64,7 @@
         "tags": [
           "measurements"
         ],
-        "summary": "Retorna dados sobre os sensores, grupos e sensores manuais",
-        "description": "Retorna os dados de identificação e temperatura de todos os sensores, grupos e sensores manuais. Esses dados são agrupados por categoria de dentro, acima e abaixo da faixa de temperatura.",
+        "summary": "Retorna leituras de sensores durante um período",
         "consumes": [
           "application/json"
         ],
@@ -82,11 +81,11 @@
           },
           {
             "in": "body",
-            "name": "filter_data",
+            "name": "filter_params",
             "description": "Dados para filtrar dados do histórico",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/FilterData"
+              "$ref": "#/definitions/FilterParams"
             }
           }
         ],
@@ -133,10 +132,12 @@
           "type": "string"
         },
         "temperature_min": {
-          "type": "number"
+          "type": "number",
+          "format": "float"
         },
         "temperature_max": {
-          "type": "number"
+          "type": "number",
+          "format": "float"
         },
         "measurements": {
           "type": "array",
@@ -156,10 +157,12 @@
           "type": "string"
         },
         "temperature_min": {
-          "type": "number"
+          "type": "number",
+          "format": "float"
         },
         "temperature_max": {
-          "type": "number"
+          "type": "number",
+          "format": "float"
         },
         "last_measurement": {
           "$ref": "#/definitions/Measurement"
@@ -171,27 +174,32 @@
       "properties": {
         "temperature": {
           "type": "number",
+          "format": "float",
           "description": "Temperatura da leitura"
         },
         "humidity": {
           "type": "number",
+          "format": "float",
           "description": "Humidade da leitura"
         },
         "date_hour": {
           "type": "string",
-          "description": "Data da leitura"
+          "description": "Data da leitura",
+          "format": "date-time"
         },
         "latitude": {
           "type": "number",
+          "format": "double",
           "description": "Latitude que a leitura foi lida"
         },
         "longitude": {
           "type": "number",
+          "format": "double",
           "description": "Longitude que a leitura foi lida"
         }
       }
     },
-    "FilterData": {
+    "FilterParams": {
       "type": "object",
       "properties": {
         "serials": {
@@ -201,10 +209,12 @@
           }
         },
         "before": {
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         },
         "after": {
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         }
       }
     }
