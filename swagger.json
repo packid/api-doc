@@ -118,7 +118,8 @@
     "api_key": {
       "type": "apiKey",
       "name": "Authorization",
-      "in": "header"
+      "in": "header",
+      "description": "Token para acesso fornecido pela PackID"
     }
   },
   "definitions": {
@@ -130,6 +131,10 @@
         },
         "label": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "example": "fixed|transport"
         },
         "temperature_min": {
           "type": "number",
@@ -155,6 +160,10 @@
         },
         "label": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "example": "fixed|transport"
         },
         "temperature_min": {
           "type": "number",
