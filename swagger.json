@@ -1,0 +1,212 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Este documento especifica como deve ser consumida a API de dados de leituras de sensores",
+    "version": "1.0.0",
+    "title": "API PackID"
+  },
+  "host": "app.packid.com.br",
+  "basePath": "/api/v2",
+  "tags": [
+    {
+      "name": "measurements",
+      "description": "Rotas para dados de leituras de sensores"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/company/{company_id}/sensors/last-measurements": {
+      "get": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna todas as últimas leituras de todos os sensores de uma company",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "path",
+            "description": "Id da empresa que será usada",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os sensores da empresa contendo dentro deles os dados da última leitura dos mesmos.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SensorLastMeasurement"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro company_id inválido"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/company/{company_id}/sensors/historic": {
+      "post": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna dados sobre os sensores, grupos e sensores manuais",
+        "description": "Retorna os dados de identificação e temperatura de todos os sensores, grupos e sensores manuais. Esses dados são agrupados por categoria de dentro, acima e abaixo da faixa de temperatura.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "path",
+            "description": "Id da empresa que será usada",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "filter_data",
+            "description": "Dados para filtrar dados do histórico",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FilterData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os sensores e suas leituras no período selecionado pela requisição.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SensorHistoric"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "SensorHistoric": {
+      "type": "object",
+      "properties": {
+        "serial": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "temperature_min": {
+          "type": "number"
+        },
+        "temperature_max": {
+          "type": "number"
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Measurement"
+          }
+        }
+      }
+    },
+    "SensorLastMeasurement": {
+      "type": "object",
+      "properties": {
+        "serial": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "temperature_min": {
+          "type": "number"
+        },
+        "temperature_max": {
+          "type": "number"
+        },
+        "last_measurement": {
+          "$ref": "#/definitions/Measurement"
+        }
+      }
+    },
+    "Measurement": {
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "description": "Temperatura da leitura"
+        },
+        "humidity": {
+          "type": "number",
+          "description": "Humidade da leitura"
+        },
+        "date_hour": {
+          "type": "string",
+          "description": "Data da leitura"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Latitude que a leitura foi lida"
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Longitude que a leitura foi lida"
+        }
+      }
+    },
+    "FilterData": {
+      "type": "object",
+      "properties": {
+        "serials": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "before": {
+          "type": "string"
+        },
+        "after": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
