@@ -59,6 +59,48 @@
         ]
       }
     },
+    "/company/{company_id}/groups": {
+      "get": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna todos os grupos de sensores junto com informações dos mesmos",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "path",
+            "description": "Id da empresa que será usada",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os grupos de uma empresa e informações de todos os sensores do grupo contendo dentro deles os dados da última leitura dos mesmos.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GroupItem"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro company_id inválido"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
     "/company/{company_id}/sensors/historic": {
       "post": {
         "tags": [
@@ -175,6 +217,28 @@
         },
         "last_measurement": {
           "$ref": "#/definitions/Measurement"
+        }
+      }
+    },
+    "GroupItem": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "type": "string"
+        },
+        "temperature_min": {
+          "type": "number",
+          "format": "float"
+        },
+        "temperature_max": {
+          "type": "number",
+          "format": "float"
+        },
+        "sensors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SensorLastMeasurement"
+          }
         }
       }
     },
