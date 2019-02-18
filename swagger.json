@@ -124,7 +124,7 @@
           {
             "in": "body",
             "name": "filter_params",
-            "description": "Dados para filtrar dados do histórico",
+            "description": "Dados para filtrar dados do histórico - IMPORTANTE: Datas devem ser todas em UTC",
             "required": true,
             "schema": {
               "$ref": "#/definitions/FilterParams"
