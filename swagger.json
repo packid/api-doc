@@ -124,7 +124,7 @@
           {
             "in": "body",
             "name": "filter_params",
-            "description": "Dados para filtrar dados do histórico - IMPORTANTE: Datas devem ser todas em UTC",
+            "description": "Dados para filtrar dados do histórico - IMPORTANTE: Datas devem ser todas na timezone do Brasil (-03:00)",
             "required": true,
             "schema": {
               "$ref": "#/definitions/FilterParams"
