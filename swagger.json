@@ -101,7 +101,7 @@
         ]
       }
     },
-    "/company/{company_id}/sensors/historic": {
+    "/company/{company_id}/sensors/history": {
       "post": {
         "tags": [
           "measurements"
@@ -137,7 +137,64 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/SensorHistoric"
+                "$ref": "#/definitions/SensorHistory"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/company/{company_id}/sensors/history/individual-filtering": {
+      "post": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna leituras de sensores durante um período filtrando com critérios individuais cada sensor",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "path",
+            "description": "Id da empresa que será usada",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "individual_filter_params",
+            "description": "Dados separados individualmente para filtrar dados do histórico - IMPORTANTE: Datas devem ser todas na timezone do Brasil (-03:00)",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IndividualParams"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os sensores e suas leituras no período selecionado pela requisição usando os critérios de filtro individuais.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SensorHistory"
               }
             }
           },
@@ -165,7 +222,7 @@
     }
   },
   "definitions": {
-    "SensorHistoric": {
+    "SensorHistory": {
       "type": "object",
       "properties": {
         "serial": {
@@ -280,6 +337,26 @@
           "items": {
             "type": "string"
           }
+        },
+        "before": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "after": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_field_to_use": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "IndividualParams": {
+      "type": "object",
+      "properties": {
+        "serials": {
+          "type": "string"
         },
         "before": {
           "type": "string",
