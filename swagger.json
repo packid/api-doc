@@ -211,6 +211,55 @@
           }
         ]
       }
+    },
+    "/users/{user_id}/companies/serials": {
+      "get": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna todos os serias dos sensores vinculados a alguma empresa do usuário",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Id do usuário que será usado",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "sensor_type",
+            "in": "query",
+            "description": "Tipo dos sensores, pode ter o valor 'transport' ou 'fixed'. Se deixado em branco retorna todos de todos os tipos.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os seriais de todos os sensores que um usuário tem acesso considerando todas as empresas vinculadas a ele.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro user_id inválido"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {
