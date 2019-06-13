@@ -212,6 +212,63 @@
         ]
       }
     },
+    "/users/{user_id}/sensors/history/individual-filtering": {
+      "post": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna leituras de sensores durante um período filtrando com critérios individuais cada sensor",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Id do usuário que será usado",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "individual_filter_params",
+            "description": "Dados separados individualmente para filtrar dados do histórico - IMPORTANTE: Datas devem ser todas na timezone do Brasil (-03:00)",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IndividualParams"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno com todos os sensores e suas leituras no período selecionado pela requisição usando os critérios de filtro individuais.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SensorHistory"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
     "/users/{user_id}/companies/serials": {
       "get": {
         "tags": [
@@ -260,6 +317,48 @@
           }
         ]
       }
+    },
+    "/users/{user_id}/companies/plates": {
+      "get": {
+        "tags": [
+          "measurements"
+        ],
+        "summary": "Retorna todos as placas, com 1 serial (quando for grupo), que o usuário teria acesso",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Id do usuário que será usado",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna todos as placas, com 1 serial (quando for grupo), que o usuário teria acesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PlateGroup"
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro user_id inválido"
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {
@@ -278,6 +377,9 @@
           "type": "string"
         },
         "label": {
+          "type": "string"
+        },
+        "vinculated_plate": {
           "type": "string"
         },
         "type": {
@@ -414,6 +516,17 @@
         "after": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "PlateGroup": {
+      "type": "object",
+      "properties": {
+        "plate": {
+          "type": "string"
+        },
+        "serial": {
+          "type": "string"
         }
       }
     }
